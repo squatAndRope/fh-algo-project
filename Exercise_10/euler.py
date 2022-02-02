@@ -37,20 +37,23 @@ class Graph:
     def isUnique(self, np_cedges):
 
         *y, = map(list, {*map(tuple, np_cedges)})
-
         if len(np_cedges) == len(y):
             return True
         return False
 
     def findCircle(self, cpath):
         cedges = []
-        while cpath[-1] != cpath[0] or len(cpath) <= 1:
+        if cpath[0] is None:
+            cpath = []
+        while cpath[-1] is not cpath[0] or len(cpath) <= 1:
             next_knot = rd.choice(range(self.knots + 1))
             knots = [cpath[-1], next_knot]
             for elem in self.edges:
                 if set(knots) == set(elem):
                     cedges.append(elem)
                     cpath.append(next_knot)
+                if cpath[-1] is cpath[0] and len(cpath) > 1:
+                    break
 
         np_cedges = np.array(cedges)
         for i in np_cedges:
@@ -68,45 +71,39 @@ class Graph:
             for j in range(len(available_knots)):
                 if cpath[-i] == available_knots[j]:
                     knot = cpath[-i]
-                    return knot
+                    return knot, i
+        return None, None
 
     def findEuler(self):
         start = rd.choice(range(1, self.knots))
-        cpath = []  # current path
-        epath = []  # final euler path
+        cpath = [start]  # current path
+        epath = ["x"] # final euler path
 
         if self.checkCircle():
-            cpath.append(start)
-            epath.append(start)
-
+            position = 1
             while True:
                 if not self.edges:
+                    epath.insert(0, start)
+                    epath.remove("x")
                     if epath[-1] != start:
                         epath.append(start)
                     self.reset()
                     return epath
-
                 else:
                     while True:
                         if not self.edges:
                             break
                         cpath, cedges = self.findCircle(cpath)  # try a circle
                         if len(cpath) > 1 and cedges is not None:
-
                             # delete used edges
                             self.edges = [elem for elem in self.edges if elem not in cedges]
-
-                            # add found circle to eulerpath
-                            tpath = cpath[:]
-                            if tpath[0] == epath[-1]:
-                                tpath.pop(0)
-
-                            for path in tpath:
-                                epath.append(path)
-
+                            # append to euler pathway
+                            cpath.pop(0)
+                            for elem in cpath:
+                                epath.insert(-position, elem)
                             # check for next knot
-                            cpath = [self.checkKnot(cpath)]
-
+                            knot, position = self.checkKnot(cpath)
+                            cpath = [knot]
         else:
             return "No Euler Circle found"
 
@@ -122,9 +119,7 @@ class Graph:
         self.findEuler()
         t_stop = time.process_time()
         execution_time = t_stop - t_start
-
         return execution_time
-
 
 def main():
     G1 = Graph(3)
@@ -157,8 +152,8 @@ def main():
 
     print("G1:", G1.findEuler(), " | Execution Time:", G1.executionTime())
     print("G2:", G2.findEuler(), " | Execution Time:", G2.executionTime())
-    print("G3:", G3.findEuler(), " | Execution Time:", G3.executionTime())
-    print("G3:", G3.findEuler(), " | Execution Time:", G3.executionTime())
+    print("G3:", G3.findEuler(), " | Execution Time:", G2.executionTime())
+    print("G3:", G3.findEuler(), " | Execution Time:", G2.executionTime())
 
     # Plot Graph
     G1.drawGraph()
