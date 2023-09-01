@@ -1,29 +1,24 @@
-list <- list("ATGT","AGGT","ATTA")
-
-total <- 0
-
-distanz <- function(dna1, dna2){
-dna1_split <-  strsplit(dna1,"")[[1]]
-dna2_split <- strsplit(dna2,"")[[1]]
-sum_words <- sum(dna1_split != dna2_split)
-  return (sum_words)
+calculateHammingDistance <- function(dna1, dna2) {
+  dna1_chars <- strsplit(dna1, "")[[1]]
+  dna2_chars <- strsplit(dna2, "")[[1]]
+  distance <- sum(dna1_chars != dna2_chars)
+  return(distance)
 }
 
-print(distanz("ATGT", "AGGT"))
-
-totalDistanz <- function(list) {
-  different <- 0
-  for (i in list){ #i=1,2,3,4,
-    for (j in list){ #j=1
-      if(i == j)
-      {
-        different <- 0
-      }
-      else {
-        different <- distanz(i,j)
-        total<- total + different
-      }
+calculateTotalDistance <- function(dna_list) {
+  total_distance <- 0
+  num_sequences <- length(dna_list)
+  for (i in 1:(num_sequences - 1)) {
+    for (j in (i + 1):num_sequences) {
+      sequence1 <- dna_list[i]
+      sequence2 <- dna_list[j]
+      difference <- calculateHammingDistance(sequence1, sequence2)
+      total_distance <- total_distance + difference
     }
   }
- return (total/2)
+  return(total_distance)
 }
+
+sequences <- c("ATGT", "AGGT", "ATTA")
+result <- calculateTotalDistance(sequences)
+cat("Total Distance:", result, "\n")
