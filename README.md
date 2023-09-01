@@ -7,8 +7,21 @@ This repository contains short scripts of the algorithms that, as part of the gr
 Krótki opis algorytmów zawartych w projekcie.
 
 1. Exercise_2
+
   Hamming Distance 
-2. Exercise_4
-3. Exercise_6
-4. Exercise_7
-5. Exercise_10
+  
+3. Exercise_4
+
+   Motif search 
+
+5. Exercise_6
+
+   Greedy algorithm
+   
+6. Exercise_7
+
+   generating DNA mutants
+   
+8. Exercise_10
+
+   Euler 
