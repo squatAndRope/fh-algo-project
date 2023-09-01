@@ -4,8 +4,6 @@ This repository contains short scripts of the algorithms that, as part of the gr
 
 ## Algorithms
 
-Krótki opis algorytmów zawartych w projekcie.
-
 1. Exercise_2
 
   Hamming Distance 
